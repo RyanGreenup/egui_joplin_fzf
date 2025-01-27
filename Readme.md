@@ -235,4 +235,4 @@ Built with:
 
 ## License
 
-[MIT License](LICENSE)
+[GPL3](LICENSE)
