@@ -9,7 +9,7 @@ use std::fmt::Display;
 fn main() -> eframe::Result {
     env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
     let options = eframe::NativeOptions {
-        viewport: egui::ViewportBuilder::default().with_inner_size([320.0, 240.0]),
+        viewport: egui::ViewportBuilder::default().with_inner_size([640.0, 480.0]),
         ..Default::default()
     };
     eframe::run_native(
@@ -113,16 +113,31 @@ impl SelectableList {
             }
         }
 
-        for i in 0..items_len {
-            let open = self.item_open[i];
-            ui.collapsing(format!("{}", self.items[i]), |ui| {
-                if Some(i) == self.selected_item {
-                    ui.visuals_mut().selection.bg_fill = egui::Color32::from_gray(196);
+        egui::SidePanel::right("note_preview")
+            .resizable(true)
+            .min_width(200.0)
+            .show_inside(ui, |ui| {
+                if let Some(selected) = self.selected_item {
+                    ui.heading(&self.items[selected].title);
+                    ui.separator();
+                    ui.label(&self.items[selected].body);
+                } else {
+                    ui.label("Select a note to preview");
                 }
-                ui.label(format!("Body: {}", self.items[i].body));
             });
-            self.item_open[i] = open;
-        }
+
+        egui::ScrollArea::vertical().show(ui, |ui| {
+            for i in 0..items_len {
+                let open = self.item_open[i];
+                ui.collapsing(format!("{}", self.items[i]), |ui| {
+                    if Some(i) == self.selected_item {
+                        ui.visuals_mut().selection.bg_fill = egui::Color32::from_gray(196);
+                    }
+                    ui.label(format!("Body: {}", self.items[i].body));
+                });
+                self.item_open[i] = open;
+            }
+        });
     }
 }
 
