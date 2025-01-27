@@ -56,7 +56,7 @@ struct MyApp {
     age: u32,
     selected_item: Option<usize>,
     initialization: bool,
-    list: SelectableList<String>,
+    list: SelectableList,
 }
 
 impl Default for MyApp {
@@ -81,14 +81,14 @@ impl Default for MyApp {
     }
 }
 
-struct SelectableList<T> {
-    items: Vec<T>,
+struct SelectableList {
+    items: Vec<Note>,
     selected_item: Option<usize>,
     item_open: Vec<bool>,
 }
 
-impl<T: std::fmt::Display> SelectableList<T> {
-    fn new(items: Vec<T>) -> Self {
+impl SelectableList {
+    fn new(items: Vec<Note>) -> Self {
         let len = items.len();
         Self {
             items,
