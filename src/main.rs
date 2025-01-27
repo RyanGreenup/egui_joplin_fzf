@@ -95,38 +95,34 @@ impl SelectableList {
         }
     }
 
-    // Refactor move_up and move_down into a common function that takes an enum to decide AI!
-    fn move_down(&mut self) {
-        if let Some(selected) = self.selected_item {
-            if selected < self.items.len() - 1 {
-                self.selected_item = Some(selected + 1);
-            }
-        } else if !self.items.is_empty() {
-            self.selected_item = Some(0);
-        }
+    #[derive(Debug, Clone, Copy)]
+    enum Direction {
+        Up,
+        Down,
     }
 
-    fn move_up(&mut self) {
-        if let Some(selected) = self.selected_item {
-            if selected > 0 {
+    fn move_selection(&mut self, direction: Direction) {
+        match (direction, self.selected_item) {
+            (Direction::Down, Some(selected)) if selected < self.items.len() - 1 => {
+                self.selected_item = Some(selected + 1);
+            }
+            (Direction::Down, None) if !self.items.is_empty() => {
+                self.selected_item = Some(0);
+            }
+            (Direction::Up, Some(selected)) if selected > 0 => {
                 self.selected_item = Some(selected - 1);
             }
+            _ => {}
         }
     }
 
     fn show(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
-        // Handle j/k keys as up/down
-        if ctx.input(|i| i.key_pressed(egui::Key::J)) {
-            self.move_down();
+        // Handle j/k and arrow keys
+        if ctx.input(|i| i.key_pressed(egui::Key::J) || i.key_pressed(egui::Key::ArrowDown)) {
+            self.move_selection(Direction::Down);
         }
-        if ctx.input(|i| i.key_pressed(egui::Key::K)) {
-            self.move_up();
-        }
-        if ctx.input(|i| i.key_pressed(egui::Key::ArrowUp)) {
-            self.move_up();
-        }
-        if ctx.input(|i| i.key_pressed(egui::Key::ArrowDown)) {
-            self.move_down()
+        if ctx.input(|i| i.key_pressed(egui::Key::K) || i.key_pressed(egui::Key::ArrowUp)) {
+            self.move_selection(Direction::Up);
         }
 
         egui::SidePanel::right("note_preview")
