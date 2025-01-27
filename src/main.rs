@@ -54,7 +54,6 @@ impl Display for Note {
 struct MyApp {
     name: String,
     age: u32,
-    selected_item: Option<usize>,
     initialization: bool,
     list: SelectableList,
 }
@@ -75,7 +74,6 @@ impl Default for MyApp {
                 ]
                 .to_vec(),
             ),
-            selected_item: None,
             initialization: true,
         }
     }
@@ -129,12 +127,17 @@ impl SelectableList {
         egui::ScrollArea::vertical().show(ui, |ui| {
             for i in 0..items_len {
                 let open = self.item_open[i];
-                ui.collapsing(format!("{}", self.items[i]), |ui| {
+                let response = ui.collapsing(format!("{}", self.items[i]), |ui| {
                     if Some(i) == self.selected_item {
                         ui.visuals_mut().selection.bg_fill = egui::Color32::from_gray(196);
                     }
                     ui.label(format!("Body: {}", self.items[i].body));
                 });
+                
+                // Handle selection on click
+                if response.header_response.clicked() {
+                    self.selected_item = Some(i);
+                }
                 self.item_open[i] = open;
             }
         });
