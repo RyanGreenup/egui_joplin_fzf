@@ -9,6 +9,28 @@ pub fn bm25_trigram(documents: &[String], target_string: &str) -> Vec<String> {
     bm25(documents, target_string, ngram_tokenize)
 }
 
+/// Sort notes by relevance to query using BM25 with trigram tokenization
+pub fn sort_notes_trigram(notes: &[Note], query: &str) -> Vec<Note> {
+    // Extract document strings from notes
+    let documents: Vec<String> = notes
+        .iter()
+        .map(|note| format!("{} {}", note.title, note.body))
+        .collect();
+    
+    // Get sorted indices using BM25 trigram
+    let sorted_docs = bm25_trigram(&documents, query);
+    
+    // Map sorted documents back to original notes
+    sorted_docs
+        .into_iter()
+        .filter_map(|doc| {
+            notes.iter().find(|note| {
+                format!("{} {}", note.title, note.body) == doc
+            }).cloned()
+        })
+        .collect()
+}
+
 pub fn bm25(
     documents: &[String],
     target_string: &str,
