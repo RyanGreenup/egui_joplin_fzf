@@ -96,6 +96,24 @@ impl SelectableList {
     }
 
     fn show(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
+        // Handle j/k keys as up/down
+        if ctx.input(|i| i.key_pressed(egui::Key::J)) {
+            if let Some(selected) = self.selected_item {
+                if selected < self.items.len() - 1 {
+                    self.selected_item = Some(selected + 1);
+                }
+            } else if !self.items.is_empty() {
+                self.selected_item = Some(0);
+            }
+        }
+        if ctx.input(|i| i.key_pressed(egui::Key::K)) {
+            if let Some(selected) = self.selected_item {
+                if selected > 0 {
+                    self.selected_item = Some(selected - 1);
+                }
+            }
+        }
+
         egui::SidePanel::right("note_preview")
             .resizable(true)
             .min_width(200.0)
@@ -113,14 +131,18 @@ impl SelectableList {
             for (i, item) in self.items.iter().enumerate() {
                 let response = ui.selectable_value(&mut self.selected_item, Some(i), &item.title);
 
-                if response.clicked() || response.secondary_clicked() || response.has_focus() {
+                // Auto-scroll when selection changes
+                if response.clicked() 
+                    || response.secondary_clicked() 
+                    || response.has_focus() 
+                    || (self.selected_item == Some(i) && response.gained_focus())
+                {
                     ui.scroll_to_cursor(Some(egui::Align::Center));
                 }
 
+                // Show details immediately for selected item
                 if Some(i) == self.selected_item {
-                    ui.collapsing("Details", |ui| {
-                        ui.label(&item.body);
-                    });
+                    ui.label(&item.body);
                 }
             }
         });
