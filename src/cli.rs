@@ -12,14 +12,15 @@ pub struct Cli {
 pub enum Commands {
     /// List all notes
     List,
-    /// Add a new note
+    /// Add a new note (TODO Remove this)
     Add {
         /// Note title
         title: String,
         /// Note content
         content: String,
     },
-    /// Search notes
+    /// Search notes and Print to stdout
+    /// TODO Implement body or title
     Search {
         /// Search query
         query: String,
