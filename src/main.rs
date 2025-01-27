@@ -96,28 +96,6 @@ impl SelectableList {
     }
 
     fn show(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
-        let items_len = self.items.len();
-
-        if ctx.input(|i| i.key_pressed(egui::Key::J)) {
-            if let Some(selected) = self.selected_item {
-                if selected < items_len - 1 {
-                    self.selected_item = Some(selected + 1);
-                    ui.scroll_to_cursor(Some(egui::Align::Center));
-                }
-            } else if !self.items.is_empty() {
-                self.selected_item = Some(0);
-                ui.scroll_to_cursor(Some(egui::Align::Center));
-            }
-        }
-        if ctx.input(|i| i.key_pressed(egui::Key::K)) {
-            if let Some(selected) = self.selected_item {
-                if selected > 0 {
-                    self.selected_item = Some(selected - 1);
-                    ui.scroll_to_cursor(Some(egui::Align::Center));
-                }
-            }
-        }
-
         egui::SidePanel::right("note_preview")
             .resizable(true)
             .min_width(200.0)
@@ -132,20 +110,18 @@ impl SelectableList {
             });
 
         egui::ScrollArea::vertical().show(ui, |ui| {
-            for i in 0..items_len {
-                let open = self.item_open[i];
-                let response = ui.collapsing(format!("{}", self.items[i]), |ui| {
-                    if Some(i) == self.selected_item {
-                        ui.visuals_mut().selection.bg_fill = egui::Color32::from_gray(196);
-                    }
-                    ui.label(format!("Body: {}", self.items[i].body));
-                });
-
-                // Handle selection on click
-                if response.header_response.clicked() {
-                    self.selected_item = Some(i);
+            for (i, item) in self.items.iter().enumerate() {
+                let response = ui.selectable_value(&mut self.selected_item, Some(i), &item.title);
+                
+                if response.clicked() || response.secondary_clicked() || response.has_focus() {
+                    ui.scroll_to_cursor(Some(egui::Align::Center));
                 }
-                self.item_open[i] = open;
+                
+                if Some(i) == self.selected_item {
+                    ui.collapsing("Details", |ui| {
+                        ui.label(&item.body);
+                    });
+                }
             }
         });
     }
