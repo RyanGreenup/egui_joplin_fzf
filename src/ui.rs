@@ -5,6 +5,7 @@ use eframe::egui;
 use rand::thread_rng;
 
 const FILTER_ID: &str = "title_filter_id";
+const BODY_FILTER_ID: &str = "body_filter_id";
 
 pub fn run() -> eframe::Result {
     env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
@@ -26,6 +27,7 @@ pub fn run() -> eframe::Result {
 
 struct MyApp {
     name: String,
+    body_filter: String,
     age: u32,
     initialization: bool,
     list: SelectableList,
@@ -36,6 +38,7 @@ impl Default for MyApp {
         let _rng = thread_rng();
         Self {
             name: "Arthur".to_owned(),
+            body_filter: String::new(),
             age: 42,
             list: SelectableList::new(
                 [
@@ -61,43 +64,85 @@ impl Default for MyApp {
     }
 }
 
+impl MyApp {
+    fn update_filtered_notes(&mut self) {
+        // Get all notes
+        let mut sorted_notes = self.list.items.clone();
+        
+        // Filter by title if there's a title filter
+        if !self.name.is_empty() {
+            let titles: Vec<String> = sorted_notes.iter()
+                .map(|note| note.title.clone())
+                .collect();
+            
+            let sorted_titles = bm25_trigram(&titles, &self.name);
+            
+            // Reorder notes based on sorted titles
+            let mut title_sorted_notes = Vec::new();
+            for title in sorted_titles {
+                if let Some(note) = sorted_notes.iter().find(|note| note.title == title) {
+                    title_sorted_notes.push(note.clone());
+                }
+            }
+            sorted_notes = title_sorted_notes;
+        }
+        
+        // Filter by body if there's a body filter
+        if !self.body_filter.is_empty() {
+            let bodies: Vec<String> = sorted_notes.iter()
+                .map(|note| note.body.clone())
+                .collect();
+            
+            let sorted_bodies = bm25_trigram(&bodies, &self.body_filter);
+            
+            // Reorder notes based on sorted bodies
+            let mut body_sorted_notes = Vec::new();
+            for body in sorted_bodies {
+                if let Some(note) = sorted_notes.iter().find(|note| note.body == body) {
+                    body_sorted_notes.push(note.clone());
+                }
+            }
+            sorted_notes = body_sorted_notes;
+        }
+        
+        // Update the list with filtered notes
+        self.list = SelectableList::new(sorted_notes);
+    }
+}
+
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         if ctx.input(|i| i.key_pressed(egui::Key::S)) {
             ctx.memory_mut(|mem| mem.request_focus(egui::Id::new(FILTER_ID)));
+        }
+        if ctx.input(|i| i.key_pressed(egui::Key::B)) {
+            ctx.memory_mut(|mem| mem.request_focus(egui::Id::new(BODY_FILTER_ID)));
         }
 
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Link Creator");
             ui.horizontal(|ui| {
                 let title_filter = ui.label("Title Filter: ");
-                let edit =
-                    ui.add(egui::TextEdit::singleline(&mut self.name).id(egui::Id::new(FILTER_ID)));
+                let edit = ui.add(
+                    egui::TextEdit::singleline(&mut self.name)
+                        .id(egui::Id::new(FILTER_ID))
+                );
 
                 if edit.changed() {
-                    // Get all titles as strings
-                    let titles: Vec<String> = self
-                        .list
-                        .items
-                        .iter()
-                        .map(|note| note.title.clone())
-                        .collect();
-
-                    // Get sorted titles using bm25_trigram
-                    let sorted_titles = bm25_trigram(&titles, &self.name);
-
-                    // Reorder notes based on sorted titles
-                    let mut sorted_notes = Vec::new();
-                    for title in sorted_titles {
-                        if let Some(note) = self.list.items.iter().find(|note| note.title == title)
-                        {
-                            sorted_notes.push(note.clone());
-                        }
-                    }
-
-                    // Update the list with sorted notes
-                    self.list = SelectableList::new(sorted_notes);
+                    self.update_filtered_notes();
                 }
+            });
+            ui.horizontal(|ui| {
+                let body_filter = ui.label("Body Filter: ");
+                let body_edit = ui.add(
+                    egui::TextEdit::singleline(&mut self.body_filter)
+                        .id(egui::Id::new(BODY_FILTER_ID))
+                );
+
+                if body_edit.changed() {
+                    self.update_filtered_notes();
+                }
+            });
 
                 if self.initialization {
                     edit.request_focus();
