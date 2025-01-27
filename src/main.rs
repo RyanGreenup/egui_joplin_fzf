@@ -4,9 +4,9 @@
 use eframe::egui;
 mod bm25;
 mod note;
-use bm25::{bm25, bm25_trigram};
+use bm25::bm25_trigram;
 use note::Note;
-use rand::{thread_rng, Rng};
+use rand::thread_rng;
 
 const FILTER_ID: &str = "title_filter_id";
 
@@ -37,7 +37,7 @@ struct MyApp {
 
 impl Default for MyApp {
     fn default() -> Self {
-        let rng = thread_rng();
+        let _rng = thread_rng();
         Self {
             name: "Arthur".to_owned(),
             age: 42,
@@ -147,10 +147,9 @@ impl eframe::App for MyApp {
             ui.heading("Link Creator");
             ui.horizontal(|ui| {
                 let title_filter = ui.label("Title Filter: ");
-                let edit = ui
-                    .text_edit_singleline(&mut self.name)
-                    .id(FILTER_ID)
-                    .labelled_by(title_filter.id);
+                let edit = ui.add(egui::TextEdit::singleline(&mut self.name)
+                    .id(egui::Id::new(FILTER_ID))
+                    .labelled_by(title_filter.id));
 
                 if edit.changed() {
                     // Get all titles as strings
