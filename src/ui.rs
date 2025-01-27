@@ -19,7 +19,7 @@ pub fn run(database: String) -> eframe::Result {
         options,
         Box::new(|cc| {
             egui_extras::install_image_loaders(&cc.egui_ctx);
-            Ok(Box::<MyApp>::new(database))
+            Box::new(MyApp::new(database))
         }),
     )
 }
@@ -113,7 +113,7 @@ impl eframe::App for MyApp {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Link Creator");
             ui.horizontal(|ui| {
-                let title_filter = ui.label("Title Filter: ");
+                let _title_filter = ui.label("Title Filter: ");
                 let edit = ui.add(
                     egui::TextEdit::singleline(&mut self.title_filter)
                         .id(egui::Id::new(FILTER_ID))
@@ -129,7 +129,7 @@ impl eframe::App for MyApp {
                 }
             });
             ui.horizontal(|ui| {
-                let body_filter = ui.label("Body Filter: ");
+                let _body_filter = ui.label("Body Filter: ");
                 let body_edit = ui.add(
                     egui::TextEdit::singleline(&mut self.body_filter)
                         .id(egui::Id::new(BODY_FILTER_ID))
