@@ -70,10 +70,16 @@ impl Default for MyApp {
 
 impl MyApp {
     fn update_filtered_notes(&mut self) {
-        // Get all notes
-        let mut sorted_notes = self.list.items.clone();
+        // Get base set of notes
+        let mut sorted_notes = if self.body_filter.is_empty() {
+            // If body filter is empty, load all notes from database
+            Note::load_all(DATABASE).unwrap_or_else(|_| Vec::new())
+        } else {
+            // If we have a body filter, use FTS search
+            Note::search(DATABASE, &self.body_filter).unwrap_or_else(|_| Vec::new())
+        };
 
-        // Filter by title if there's a title filter
+        // Then apply title filter if present
         if !self.title_filter.is_empty() {
             let titles: Vec<String> = sorted_notes.iter()
                 .map(|note| note.title.clone())
@@ -89,13 +95,6 @@ impl MyApp {
                 }
             }
             sorted_notes = title_sorted_notes;
-        }
-
-        // Filter by body using SQLite FTS search if there's a body filter
-        if !self.body_filter.is_empty() {
-            if let Ok(matches) = Note::search(DATABASE, &self.body_filter) {
-                sorted_notes = matches;
-            }
         }
 
         // Update the list with filtered notes
