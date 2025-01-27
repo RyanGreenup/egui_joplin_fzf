@@ -98,7 +98,7 @@ impl SelectableList {
     fn show(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
         let items_len = self.items.len();
 
-        // Handle j/k key navigation
+        // Improve this so j and k also moves the selection down one AI!
         if ctx.input(|i| i.key_pressed(egui::Key::J)) {
             if let Some(selected) = self.selected_item {
                 if selected < items_len - 1 {
