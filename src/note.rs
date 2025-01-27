@@ -71,7 +71,6 @@ impl Note {
         
         Ok(notes)
     }
-}
 
 impl Display for Note {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
