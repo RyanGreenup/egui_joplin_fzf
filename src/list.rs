@@ -113,10 +113,8 @@ impl SelectableList {
                 }
 
                 // Show details immediately for selected item
-                if Some(i) == self.selected_item {
-                    if self.show_preview_under {
-                        ui.label(&item.body);
-                    }
+                if Some(i) == self.selected_item && self.show_preview_under {
+                    ui.label(&item.body);
                 }
             }
         });
