@@ -51,6 +51,11 @@ impl SelectableList {
     }
 
     pub fn show(&mut self, ctx: &egui::Context, ui: &mut egui::Ui, id: &str) {
+        // Auto-select first item if nothing is selected
+        if self.selected_item.is_none() && !self.items.is_empty() {
+            self.selected_item = Some(0);
+        }
+
         // Handle j/k and arrow keys
         if ctx.input(|i| i.key_pressed(egui::Key::J) || i.key_pressed(egui::Key::ArrowDown)) {
             self.move_selection(Direction::Down);
