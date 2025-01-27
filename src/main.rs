@@ -2,10 +2,10 @@
 #![allow(rustdoc::missing_crate_level_docs)] // it's an example
 
 mod bm25;
+mod cli;
+mod list;
 mod note;
 mod ui;
-mod list;
-mod cli;
 
 use clap::Parser;
 use cli::Cli;

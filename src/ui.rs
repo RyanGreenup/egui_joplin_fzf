@@ -38,9 +38,7 @@ impl MyApp {
         Self {
             title_filter: "".to_owned(),
             body_filter: String::new(),
-            list: SelectableList::new(
-                Note::load_all(&database).expect("unable to load database")
-            ),
+            list: SelectableList::new(Note::load_all(&database).expect("unable to load database")),
             initialization: true,
             database,
         }
@@ -60,9 +58,7 @@ impl MyApp {
 
         // Then apply title filter if present
         if !self.title_filter.is_empty() {
-            let titles: Vec<String> = sorted_notes.iter()
-                .map(|note| note.title.clone())
-                .collect();
+            let titles: Vec<String> = sorted_notes.iter().map(|note| note.title.clone()).collect();
 
             let sorted_titles = bm25_trigram(&titles, &self.title_filter);
 
@@ -99,7 +95,6 @@ impl eframe::App for MyApp {
             self.list.print_selected();
             // Automatically close
             std::process::exit(0);
-
         }
         if ctx.input(|i| i.key_pressed(egui::Key::N) && i.modifiers.ctrl) {
             self.list.move_selection(crate::list::Direction::Down);
@@ -113,8 +108,7 @@ impl eframe::App for MyApp {
             ui.horizontal(|ui| {
                 let _title_filter = ui.label("Title Filter: ");
                 let edit = ui.add(
-                    egui::TextEdit::singleline(&mut self.title_filter)
-                        .id(egui::Id::new(FILTER_ID))
+                    egui::TextEdit::singleline(&mut self.title_filter).id(egui::Id::new(FILTER_ID)),
                 );
 
                 if edit.changed() {
@@ -130,7 +124,7 @@ impl eframe::App for MyApp {
                 let _body_filter = ui.label("Body Filter: ");
                 let body_edit = ui.add(
                     egui::TextEdit::singleline(&mut self.body_filter)
-                        .id(egui::Id::new(BODY_FILTER_ID))
+                        .id(egui::Id::new(BODY_FILTER_ID)),
                 );
 
                 if body_edit.changed() {
