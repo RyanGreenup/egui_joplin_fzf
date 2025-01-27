@@ -98,8 +98,23 @@ impl SelectableList {
     fn show(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
         let items_len = self.items.len();
 
-        // Implement j/k keys to go up and down AI!
-
+        // Handle j/k key navigation
+        if ctx.input(|i| i.key_pressed(egui::Key::J)) {
+            if let Some(selected) = self.selected_item {
+                if selected < items_len - 1 {
+                    self.selected_item = Some(selected + 1);
+                }
+            } else if !self.items.is_empty() {
+                self.selected_item = Some(0);
+            }
+        }
+        if ctx.input(|i| i.key_pressed(egui::Key::K)) {
+            if let Some(selected) = self.selected_item {
+                if selected > 0 {
+                    self.selected_item = Some(selected - 1);
+                }
+            }
+        }
 
         egui::SidePanel::right("note_preview")
             .resizable(true)
