@@ -1,6 +1,6 @@
 # Note Link Creator
 
-A fast and efficient link selector for Chalsedony (and Joplin). This is pr
+A fast and efficient link selector for Chalsedony (and Joplin). This is primarily for inserting links into other editors such as vim and emacs
 
 ![](./assets/screenshot.png)
 
