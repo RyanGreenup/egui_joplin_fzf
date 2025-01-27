@@ -119,9 +119,7 @@ impl SelectableList {
                 if Some(i) == self.selected_item {
                     ui.visuals_mut().selection.bg_fill = egui::Color32::from_gray(196);
                 }
-                ui.label(format!("Sub-item {}-1", i + 1));
-                ui.label(format!("Sub-item {}-2", i + 1));
-                ui.label(format!("Sub-item {}-3", i + 1));
+                ui.label(format!("Body: {}", self.items[i].body));
             });
             self.item_open[i] = open;
         }
@@ -133,7 +131,7 @@ impl eframe::App for MyApp {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Link Creator");
             ui.horizontal(|ui| {
-                let name_label = ui.label("Your name: ");
+                let name_label = ui.label("Title Filter: ");
                 let edit = ui
                     .text_edit_singleline(&mut self.name)
                     .labelled_by(name_label.id);
@@ -143,10 +141,12 @@ impl eframe::App for MyApp {
                     self.initialization = false;
                 }
             });
-            ui.label(format!("Hello '{}', age {}", self.name, self.age));
             ui.separator();
             ui.heading("Items List");
             self.list.show(ctx, ui);
         });
     }
 }
+
+
+
