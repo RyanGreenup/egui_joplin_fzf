@@ -22,7 +22,6 @@ impl UIMarkdown for egui::Ui {
 pub struct SelectableList {
     pub items: Vec<Note>,
     pub selected_item: Option<usize>,
-    pub item_open: Vec<bool>,
     pub show_preview_under: bool,
 }
 
@@ -32,7 +31,6 @@ impl SelectableList {
         Self {
             items,
             selected_item: None,
-            item_open: vec![false; len],
             show_preview_under: false,
         }
     }
