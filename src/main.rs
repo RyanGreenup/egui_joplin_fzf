@@ -7,6 +7,18 @@ mod note;
 use bm25::bm25_trigram;
 use note::Note;
 use rand::thread_rng;
+use egui_demo_lib::easy_mark::easy_mark;
+use unindent::unindent;
+
+pub trait UIMarkdown {
+    fn markdown(&mut self, markdown: &str);
+}
+
+impl UIMarkdown for egui::Ui {
+    fn markdown(&mut self, markdown: &str) {
+        easy_mark(self, &unindent(markdown));
+    }
+}
 
 const FILTER_ID: &str = "title_filter_id";
 
@@ -109,7 +121,7 @@ impl SelectableList {
                 if let Some(selected) = self.selected_item {
                     ui.heading(&self.items[selected].title);
                     ui.separator();
-                    ui.label(&self.items[selected].body);
+                    ui.markdown(&self.items[selected].body);
                 } else {
                     ui.label("Select a note to preview");
                 }
