@@ -50,7 +50,7 @@ impl SelectableList {
         }
     }
 
-    pub fn show(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
+    pub fn show(&mut self, ctx: &egui::Context, ui: &mut egui::Ui, id: &str) {
         // Handle j/k and arrow keys
         if ctx.input(|i| i.key_pressed(egui::Key::J) || i.key_pressed(egui::Key::ArrowDown)) {
             self.move_selection(Direction::Down);
@@ -73,7 +73,9 @@ impl SelectableList {
                 }
             });
 
-        egui::ScrollArea::vertical().show(ui, |ui| {
+        egui::ScrollArea::vertical()
+            .id_source(id)
+            .show(ui, |ui| {
             for (i, item) in self.items.iter().enumerate() {
                 let response = ui.selectable_value(&mut self.selected_item, Some(i), &item.title);
 

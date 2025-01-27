@@ -6,6 +6,7 @@ use rand::thread_rng;
 
 const FILTER_ID: &str = "title_filter_id";
 const BODY_FILTER_ID: &str = "body_filter_id";
+const LIST_ID: &str = "notes_list_id";
 
 pub fn run() -> eframe::Result {
     env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
@@ -118,7 +119,9 @@ impl eframe::App for MyApp {
         if ctx.input(|i| i.key_pressed(egui::Key::B) && i.modifiers.ctrl) {
             ctx.memory_mut(|mem| mem.request_focus(egui::Id::new(BODY_FILTER_ID)));
         }
-        // Map Ctrl+L to focus the list AI!
+        if ctx.input(|i| i.key_pressed(egui::Key::L) && i.modifiers.ctrl) {
+            ctx.memory_mut(|mem| mem.request_focus(egui::Id::new(LIST_ID)));
+        }
 
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Link Creator");
@@ -152,7 +155,7 @@ impl eframe::App for MyApp {
 
             ui.separator();
             ui.heading("Items List");
-            self.list.show(ctx, ui);
+            self.list.show(ctx, ui, LIST_ID);
         });
     }
 }
