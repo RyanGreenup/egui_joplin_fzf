@@ -95,23 +95,38 @@ impl SelectableList {
         }
     }
 
+    // Refactor move_up and move_down into a common function that takes an enum to decide AI!
+    fn move_down(&mut self) {
+        if let Some(selected) = self.selected_item {
+            if selected < self.items.len() - 1 {
+                self.selected_item = Some(selected + 1);
+            }
+        } else if !self.items.is_empty() {
+            self.selected_item = Some(0);
+        }
+    }
+
+    fn move_up(&mut self) {
+        if let Some(selected) = self.selected_item {
+            if selected > 0 {
+                self.selected_item = Some(selected - 1);
+            }
+        }
+    }
+
     fn show(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
         // Handle j/k keys as up/down
         if ctx.input(|i| i.key_pressed(egui::Key::J)) {
-            if let Some(selected) = self.selected_item {
-                if selected < self.items.len() - 1 {
-                    self.selected_item = Some(selected + 1);
-                }
-            } else if !self.items.is_empty() {
-                self.selected_item = Some(0);
-            }
+            self.move_down();
         }
         if ctx.input(|i| i.key_pressed(egui::Key::K)) {
-            if let Some(selected) = self.selected_item {
-                if selected > 0 {
-                    self.selected_item = Some(selected - 1);
-                }
-            }
+            self.move_up();
+        }
+        if ctx.input(|i| i.key_pressed(egui::Key::ArrowUp)) {
+            self.move_up();
+        }
+        if ctx.input(|i| i.key_pressed(egui::Key::ArrowDown)) {
+            self.move_down()
         }
 
         egui::SidePanel::right("note_preview")
@@ -132,9 +147,9 @@ impl SelectableList {
                 let response = ui.selectable_value(&mut self.selected_item, Some(i), &item.title);
 
                 // Auto-scroll when selection changes
-                if response.clicked() 
-                    || response.secondary_clicked() 
-                    || response.has_focus() 
+                if response.clicked()
+                    || response.secondary_clicked()
+                    || response.has_focus()
                     || (self.selected_item == Some(i) && response.gained_focus())
                 {
                     ui.scroll_to_cursor(Some(egui::Align::Center));
@@ -170,6 +185,3 @@ impl eframe::App for MyApp {
         });
     }
 }
-
-
-
