@@ -681,6 +681,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "color-hex"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ecdffb913a326b6c642290a0d0ec8e8d6597291acdc07cc4c9cb4b3635d44cf9"
+
+[[package]]
 name = "colorchoice"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -859,6 +865,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7d72e9c39f6e11a2e922d04a34ec5e7ef522ea3f5a1acfca7a19d16ad5fe50f5"
 dependencies = [
  "bytemuck",
+ "color-hex",
  "emath",
 ]
 
@@ -953,6 +960,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "egui_demo_lib"
+version = "0.30.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "94631343075623cd2a4ce47fca6fb75d54117abc4d30d5180f5802ff90a8ab5c"
+dependencies = [
+ "egui",
+ "egui_extras",
+ "unicode_names2",
+]
+
+[[package]]
 name = "egui_extras"
 version = "0.30.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -991,10 +1009,12 @@ version = "0.1.0"
 dependencies = [
  "chrono",
  "eframe",
+ "egui_demo_lib",
  "egui_extras",
  "env_logger",
  "ordered-float",
  "rand",
+ "unindent",
 ]
 
 [[package]]
@@ -2910,6 +2930,18 @@ name = "unicode-xid"
 version = "0.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ebc1c04c71510c7f702b52b7c350734c9ff1295c464a03335b00bb84fc54f853"
+
+[[package]]
+name = "unicode_names2"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "446c96c6dd42604779487f0a981060717156648c1706aa1f464677f03c6cc059"
+
+[[package]]
+name = "unindent"
+version = "0.2.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c7de7d73e1754487cb58364ee906a499937a0dfabd86bcb980fa99ec8c8fa2ce"
 
 [[package]]
 name = "url"
