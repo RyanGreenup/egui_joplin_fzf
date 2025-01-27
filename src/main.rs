@@ -67,11 +67,11 @@ impl Default for MyApp {
             age: 42,
             list: SelectableList::new(
                 [
-                    Note::random("A", "B"),
-                    Note::random("A", "B"),
-                    Note::random("A", "B"),
-                    Note::random("A", "B"),
-                    Note::random("A", "B"),
+                    Note::random("Title 1", "Body 1"),
+                    Note::random("Title 2", "Body 2"),
+                    Note::random("Title 3", "Body 3"),
+                    Note::random("Title 4", "Body 4"),
+                    Note::random("Title 5", "Body 5"),
                 ]
                 .to_vec(),
             ),
