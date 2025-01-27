@@ -1,8 +1,8 @@
 [package]
-name = "egui_list"
+name = "egui_chalsedony_note_selector"
 version = "0.1.0"
-authors = ["Emil Ernerfeldt <emil.ernerfeldt@gmail.com>"]
-license = "MIT OR Apache-2.0"
+authors = ["Ryan Greenup <ryanxgreenup@gmail.com>"]
+license = "GPL3"
 edition = "2021"
 publish = false
 
@@ -22,5 +22,5 @@ clap = { version = "4.5.27", features = ["derive"] }
 rusqlite = { version = "0.33.0", features = ["bundled"] }
 
 [[bin]]
-name = "egui_list"
+name = "chalsedony_selector"
 path = "src/main.rs"

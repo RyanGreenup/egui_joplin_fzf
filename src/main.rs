@@ -9,24 +9,35 @@ mod ui;
 
 use clap::Parser;
 use cli::Cli;
+use note::Note;
 
 fn main() -> eframe::Result {
     let cli = Cli::parse();
 
     match cli.command {
         Some(cli::Commands::List) => {
-            println!("Listing notes from database: {}", cli.database);
+            let mut notes = Note::load_all(&cli.database).expect("Unable to load database");
+            notes.reverse();
+            for n in notes {
+                println!("{}\t {}", n.id, n.title);
+            }
+
             // TODO: Implement list functionality using cli.database
-        }
-        Some(cli::Commands::Add { title, content }) => {
-            println!("Adding note to database: {}", cli.database);
-            println!("Title: {}\nContent: {}", title, content);
-            // TODO: Implement add functionality using cli.database
         }
         Some(cli::Commands::Search { query }) => {
             println!("Searching in database: {}", cli.database);
             println!("Query: {}", query);
             // TODO: Implement search functionality using cli.database
+            let mut notes =
+                Note::search(&cli.database, query.as_str()).expect("Unable to load database");
+            notes.reverse();
+            for n in notes {
+                println!("{}\t {}", n.id, n.title);
+            }
+        }
+        Some(cli::Commands::Preview { id }) => {
+            let body = Note::get_body_by_id(&cli.database, id.as_str()).expect("Unable to load database");
+            println!("{body}");
         }
         None => {
             // No command provided, run the GUI

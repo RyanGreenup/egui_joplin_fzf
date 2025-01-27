@@ -1000,6 +1000,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "egui_chalsedony_note_selector"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "clap",
+ "eframe",
+ "egui_demo_lib",
+ "egui_extras",
+ "env_logger",
+ "ordered-float",
+ "rand",
+ "rusqlite",
+ "unindent",
+]
+
+[[package]]
 name = "egui_demo_lib"
 version = "0.30.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1041,22 +1057,6 @@ dependencies = [
  "wasm-bindgen",
  "web-sys",
  "winit",
-]
-
-[[package]]
-name = "egui_list"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "clap",
- "eframe",
- "egui_demo_lib",
- "egui_extras",
- "env_logger",
- "ordered-float",
- "rand",
- "rusqlite",
- "unindent",
 ]
 
 [[package]]
