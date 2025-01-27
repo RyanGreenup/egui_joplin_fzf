@@ -41,11 +41,11 @@ impl Default for MyApp {
             age: 42,
             list: SelectableList::new(
                 [
-                    Note::random("Title 1", "Body 1"),
-                    Note::random("Title 2", "Body 2"),
-                    Note::random("Title 3", "Body 3"),
-                    Note::random("Title 4", "Body 4"),
-                    Note::random("Title 5", "Body 5"),
+                    Note::random("Pythagorean Theorem", "In a right triangle, a² + b² = c²"),
+                    Note::random("Golden Ratio", "The golden ratio φ ≈ 1.618033988749895"),
+                    Note::random("Euler's Number", "e ≈ 2.718281828459045, base of natural logarithms"),
+                    Note::random("Pi", "π ≈ 3.14159265359, ratio of circle's circumference to diameter"),
+                    Note::random("Fibonacci Sequence", "0, 1, 1, 2, 3, 5, 8, 13, 21..."),
                 ]
                 .to_vec(),
             ),
