@@ -78,7 +78,7 @@ impl SelectableList {
             self.move_selection(Direction::Up);
         }
 
-        egui::SidePanel::right("note_preview")
+        egui::SidePanel::left("note_preview")
             .resizable(true)
             .min_width(400.0)
             .show_inside(ui, |ui| {

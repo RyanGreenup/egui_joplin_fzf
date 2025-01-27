@@ -228,10 +228,17 @@ def ensure_fts_table(stemmer: Stemmer = Stemmer.PORTER) -> None:
 
 ## Development
 
-Built with:
+### Built With
+
 - [egui](https://github.com/emilk/egui) - Pure Rust GUI framework
 - [rusqlite](https://github.com/rusqlite/rusqlite) - SQLite bindings for Rust
 - [clap](https://github.com/clap-rs/clap) - Command line argument parser
+
+### TODO
+
+- [ ] Cache the BM25 Index
+    - This isn't done yet, time
+    - Elected for this over adding another sqlite table as I don't want to diverge too far from the standard joplin database
 
 ## License
 
