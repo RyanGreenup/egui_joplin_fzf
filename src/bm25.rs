@@ -5,7 +5,10 @@ fn default_tokenize(s: &str) -> Vec<String> {
     s.split_whitespace().map(String::from).collect()
 }
 
-// Create a bm25_trigram function that uses a trigram tokenizer to perform bm25, reuse existing functions AI!
+/// BM25 search using trigram tokenization
+pub fn bm25_trigram(documents: &[String], target_string: &str) -> Vec<String> {
+    bm25(documents, target_string, ngram_tokenize)
+}
 
 pub fn bm25(
     documents: &[String],
