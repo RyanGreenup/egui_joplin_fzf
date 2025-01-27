@@ -4,9 +4,33 @@
 mod bm25;
 mod note;
 mod ui;
-use ui::run;
 mod list;
+mod cli;
+
+use clap::Parser;
+use cli::Cli;
 
 fn main() -> eframe::Result {
-    run()
+    let cli = Cli::parse();
+
+    match cli.command {
+        Some(cli::Commands::List) => {
+            println!("Listing notes...");
+            // TODO: Implement list functionality
+        }
+        Some(cli::Commands::Add { title, content }) => {
+            println!("Adding note: {} - {}", title, content);
+            // TODO: Implement add functionality
+        }
+        Some(cli::Commands::Search { query }) => {
+            println!("Searching for: {}", query);
+            // TODO: Implement search functionality
+        }
+        None => {
+            // No command provided, run the GUI
+            ui::run()?
+        }
+    }
+
+    Ok(())
 }
