@@ -82,37 +82,38 @@ impl SelectableList {
             .resizable(true)
             .min_width(400.0)
             .show_inside(ui, |ui| {
-                if let Some(selected) = self.selected_item {
-                    ui.heading(&self.items[selected].title);
-                    ui.separator();
-                    // ui.label(&self.items[selected].body);
-                    // TODO needs to be scrollable
+                for (i, item) in self.items.iter().enumerate() {
+                    let response =
+                        ui.selectable_value(&mut self.selected_item, Some(i), &item.title);
 
-                    egui::ScrollArea::vertical().show(ui, |ui| {
-                        ui.markdown(&self.items[selected].body);
-                    });
-                } else {
-                    ui.label("Select a note to preview");
+                    // Auto-scroll when selection changes
+                    if response.clicked()
+                        || response.secondary_clicked()
+                        || response.has_focus()
+                        || (self.selected_item == Some(i) && response.gained_focus())
+                    {
+                        ui.scroll_to_cursor(Some(egui::Align::Center));
+                    }
+
+                    // Show details immediately for selected item
+                    if Some(i) == self.selected_item && self.show_preview_under {
+                        ui.label(&item.body);
+                    }
                 }
             });
 
         egui::ScrollArea::vertical().id_salt(id).show(ui, |ui| {
-            for (i, item) in self.items.iter().enumerate() {
-                let response = ui.selectable_value(&mut self.selected_item, Some(i), &item.title);
+            if let Some(selected) = self.selected_item {
+                ui.heading(&self.items[selected].title);
+                ui.separator();
+                // ui.label(&self.items[selected].body);
+                // TODO needs to be scrollable
 
-                // Auto-scroll when selection changes
-                if response.clicked()
-                    || response.secondary_clicked()
-                    || response.has_focus()
-                    || (self.selected_item == Some(i) && response.gained_focus())
-                {
-                    ui.scroll_to_cursor(Some(egui::Align::Center));
-                }
-
-                // Show details immediately for selected item
-                if Some(i) == self.selected_item && self.show_preview_under {
-                    ui.label(&item.body);
-                }
+                egui::ScrollArea::vertical().show(ui, |ui| {
+                    ui.markdown(&self.items[selected].body);
+                });
+            } else {
+                ui.label("Select a note to preview");
             }
         });
     }
