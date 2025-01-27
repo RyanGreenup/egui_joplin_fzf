@@ -148,7 +148,7 @@ impl eframe::App for MyApp {
                     edit.request_focus();
                     self.initialization = false;
                 }
-            });
+
             ui.separator();
             ui.heading("Items List");
             self.list.show(ctx, ui);
