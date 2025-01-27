@@ -131,6 +131,11 @@ impl eframe::App for MyApp {
                 if edit.changed() {
                     self.update_filtered_notes();
                 }
+
+                if self.initialization {
+                    edit.request_focus();
+                    self.initialization = false;
+                }
             });
             ui.horizontal(|ui| {
                 let body_filter = ui.label("Body Filter: ");
@@ -143,11 +148,6 @@ impl eframe::App for MyApp {
                     self.update_filtered_notes();
                 }
             });
-
-                if self.initialization {
-                    edit.request_focus();
-                    self.initialization = false;
-                }
 
             ui.separator();
             ui.heading("Items List");
