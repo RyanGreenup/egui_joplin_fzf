@@ -30,20 +30,21 @@ struct MyApp {
     age: u32,
     initialization: bool,
     list: SelectableList,
+    database: String,
 }
 
-
-impl Default for MyApp {
-    fn default() -> Self {
+impl MyApp {
+    fn new(database: String) -> Self {
         let _rng = thread_rng();
         Self {
             title_filter: "".to_owned(),
             body_filter: String::new(),
             age: 42,
             list: SelectableList::new(
-                Note::load_all(DATABASE).expect("unable to load database")
+                Note::load_all(&database).expect("unable to load database")
             ),
             initialization: true,
+            database,
         }
     }
 }
