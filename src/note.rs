@@ -12,7 +12,7 @@ impl Note {
     pub fn load_all(db_path: &str) -> SqlResult<Vec<Note>> {
         let conn = Connection::open(db_path)?;
 
-        let mut stmt = conn.prepare("SELECT title, body, id FROM notes")?;
+        let mut stmt = conn.prepare("SELECT title, body, id FROM notes ORDER BY user_updated_time")?;
         let note_iter = stmt.query_map([], |row| {
             Ok(Note {
                 title: row.get(0)?,
