@@ -96,7 +96,7 @@ impl SelectableList {
                 }
             });
 
-        egui::ScrollArea::vertical().id_source(id).show(ui, |ui| {
+        egui::ScrollArea::vertical().id_salt(id).show(ui, |ui| {
             for (i, item) in self.items.iter().enumerate() {
                 let response = ui.selectable_value(&mut self.selected_item, Some(i), &item.title);
 
