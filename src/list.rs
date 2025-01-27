@@ -82,24 +82,26 @@ impl SelectableList {
             .resizable(true)
             .min_width(400.0)
             .show_inside(ui, |ui| {
-                for (i, item) in self.items.iter().enumerate() {
-                    let response =
-                        ui.selectable_value(&mut self.selected_item, Some(i), &item.title);
+                egui::ScrollArea::vertical().show(ui, |ui| {
+                    for (i, item) in self.items.iter().enumerate() {
+                        let response =
+                            ui.selectable_value(&mut self.selected_item, Some(i), &item.title);
 
-                    // Auto-scroll when selection changes
-                    if response.clicked()
-                        || response.secondary_clicked()
-                        || response.has_focus()
-                        || (self.selected_item == Some(i) && response.gained_focus())
-                    {
-                        ui.scroll_to_cursor(Some(egui::Align::Center));
-                    }
+                        // Auto-scroll when selection changes
+                        if response.clicked()
+                            || response.secondary_clicked()
+                            || response.has_focus()
+                            || (self.selected_item == Some(i) && response.gained_focus())
+                        {
+                            ui.scroll_to_cursor(Some(egui::Align::Center));
+                        }
 
-                    // Show details immediately for selected item
-                    if Some(i) == self.selected_item && self.show_preview_under {
-                        ui.label(&item.body);
+                        // Show details immediately for selected item
+                        if Some(i) == self.selected_item && self.show_preview_under {
+                            ui.label(&item.body);
+                        }
                     }
-                }
+                });
             });
 
         egui::ScrollArea::vertical().id_salt(id).show(ui, |ui| {

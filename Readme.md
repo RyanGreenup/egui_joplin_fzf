@@ -239,6 +239,8 @@ def ensure_fts_table(stemmer: Stemmer = Stemmer.PORTER) -> None:
 - [ ] Cache the BM25 Index
     - This isn't done yet, time
     - Elected for this over adding another sqlite table as I don't want to diverge too far from the standard joplin database
+- [ ]
+    - C-n should adjust scroll so nothing is off scroll area
 
 ## License
 
