@@ -140,10 +140,10 @@ impl eframe::App for MyApp {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Link Creator");
             ui.horizontal(|ui| {
-                let name_label = ui.label("Title Filter: ");
+                let title_filter = ui.label("Title Filter: ");
                 let edit = ui
                     .text_edit_singleline(&mut self.name)
-                    .labelled_by(name_label.id);
+                    .labelled_by(title_filter.id);
 
                 if self.initialization {
                     edit.request_focus();
