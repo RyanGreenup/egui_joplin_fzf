@@ -43,7 +43,7 @@ impl Default for MyApp {
             age: 42,
             list: SelectableList::new(
                 [
-                    Note::random("Pythagorean Theorem", "In a right triangle, a² + b² = c²"),
+                    Note::random("Pythagorean Theorem", r#"# Heading \n content \n In a right triangle, a² + b² = c²"#),
                     Note::random("Golden Ratio", "The golden ratio φ ≈ 1.618033988749895"),
                     Note::random("Euler's Number", "e ≈ 2.718281828459045, base of natural logarithms"),
                     Note::random("Pi", "π ≈ 3.14159265359, ratio of circle's circumference to diameter"),
@@ -167,7 +167,7 @@ impl eframe::App for MyApp {
                             sorted_notes.push(note.clone());
                         }
                     }
-                    
+
                     // Update the list with sorted notes
                     self.list = SelectableList::new(sorted_notes);
                 }
