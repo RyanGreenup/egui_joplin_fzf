@@ -50,6 +50,14 @@ impl SelectableList {
         }
     }
 
+    pub fn copy_selected_to_clipboard(&self, ctx: &egui::Context) {
+        if let Some(selected) = self.selected_item {
+            let note = &self.items[selected];
+            let text = format!("# {}\n\n{}", note.title, note.body);
+            ctx.output_mut(|o| o.copied_text = text);
+        }
+    }
+
     pub fn show(&mut self, ctx: &egui::Context, ui: &mut egui::Ui, id: &str) {
         // Auto-select first item if nothing is selected
         if self.selected_item.is_none() && !self.items.is_empty() {
