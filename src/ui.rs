@@ -27,7 +27,6 @@ pub fn run(database: String) -> eframe::Result {
 struct MyApp {
     title_filter: String,
     body_filter: String,
-    age: u32,
     initialization: bool,
     list: SelectableList,
     database: String,
@@ -39,7 +38,6 @@ impl MyApp {
         Self {
             title_filter: "".to_owned(),
             body_filter: String::new(),
-            age: 42,
             list: SelectableList::new(
                 Note::load_all(&database).expect("unable to load database")
             ),
