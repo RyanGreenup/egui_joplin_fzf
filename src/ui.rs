@@ -27,7 +27,7 @@ pub fn run() -> eframe::Result {
 }
 
 struct MyApp {
-    name: String,
+    title_filter: String,
     body_filter: String,
     age: u32,
     initialization: bool,
@@ -38,7 +38,7 @@ impl Default for MyApp {
     fn default() -> Self {
         let _rng = thread_rng();
         Self {
-            name: "Arthur".to_owned(),
+            title_filter: "".to_owned(),
             body_filter: String::new(),
             age: 42,
             list: SelectableList::new(
@@ -69,15 +69,15 @@ impl MyApp {
     fn update_filtered_notes(&mut self) {
         // Get all notes
         let mut sorted_notes = self.list.items.clone();
-        
+
         // Filter by title if there's a title filter
-        if !self.name.is_empty() {
+        if !self.title_filter.is_empty() {
             let titles: Vec<String> = sorted_notes.iter()
                 .map(|note| note.title.clone())
                 .collect();
-            
-            let sorted_titles = bm25_trigram(&titles, &self.name);
-            
+
+            let sorted_titles = bm25_trigram(&titles, &self.title_filter);
+
             // Reorder notes based on sorted titles
             let mut title_sorted_notes = Vec::new();
             for title in sorted_titles {
@@ -87,15 +87,15 @@ impl MyApp {
             }
             sorted_notes = title_sorted_notes;
         }
-        
+
         // Filter by body if there's a body filter
         if !self.body_filter.is_empty() {
             let bodies: Vec<String> = sorted_notes.iter()
                 .map(|note| note.body.clone())
                 .collect();
-            
+
             let sorted_bodies = bm25_trigram(&bodies, &self.body_filter);
-            
+
             // Reorder notes based on sorted bodies
             let mut body_sorted_notes = Vec::new();
             for body in sorted_bodies {
@@ -105,7 +105,7 @@ impl MyApp {
             }
             sorted_notes = body_sorted_notes;
         }
-        
+
         // Update the list with filtered notes
         self.list = SelectableList::new(sorted_notes);
     }
@@ -127,6 +127,15 @@ impl eframe::App for MyApp {
         }
         if ctx.input(|i| i.key_pressed(egui::Key::Enter)) {
             self.list.print_selected();
+            // Automatically close
+            std::process::exit(0);
+
+        }
+        if ctx.input(|i| i.key_pressed(egui::Key::N) && i.modifiers.ctrl) {
+            self.list.move_selection(crate::list::Direction::Down);
+        }
+        if ctx.input(|i| i.key_pressed(egui::Key::P) && i.modifiers.ctrl) {
+            self.list.move_selection(crate::list::Direction::Up);
         }
 
         egui::CentralPanel::default().show(ctx, |ui| {
@@ -134,7 +143,7 @@ impl eframe::App for MyApp {
             ui.horizontal(|ui| {
                 let title_filter = ui.label("Title Filter: ");
                 let edit = ui.add(
-                    egui::TextEdit::singleline(&mut self.name)
+                    egui::TextEdit::singleline(&mut self.title_filter)
                         .id(egui::Id::new(FILTER_ID))
                 );
 

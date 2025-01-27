@@ -4,7 +4,7 @@ use egui_demo_lib::easy_mark::easy_mark;
 use unindent::unindent;
 
 #[derive(Debug, Clone, Copy)]
-enum Direction {
+pub enum Direction {
     Up,
     Down,
 }
@@ -23,6 +23,7 @@ pub struct SelectableList {
     pub items: Vec<Note>,
     pub selected_item: Option<usize>,
     pub item_open: Vec<bool>,
+    pub show_preview_under: bool,
 }
 
 impl SelectableList {
@@ -32,10 +33,11 @@ impl SelectableList {
             items,
             selected_item: None,
             item_open: vec![false; len],
+            show_preview_under: false,
         }
     }
 
-    fn move_selection(&mut self, direction: Direction) {
+    pub fn move_selection(&mut self, direction: Direction) {
         match (direction, self.selected_item) {
             (Direction::Down, Some(selected)) if selected < self.items.len() - 1 => {
                 self.selected_item = Some(selected + 1);
@@ -61,7 +63,7 @@ impl SelectableList {
     pub fn print_selected(&self) {
         if let Some(selected) = self.selected_item {
             let note = &self.items[selected];
-            println!("# {}\n\n{}", note.title, note.body);
+            println!("[{}](:/{})", note.title, note.id);
         }
     }
 
@@ -110,7 +112,9 @@ impl SelectableList {
 
                 // Show details immediately for selected item
                 if Some(i) == self.selected_item {
+                    if self.show_preview_under {
                     ui.label(&item.body);
+                    }
                 }
             }
         });
