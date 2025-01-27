@@ -133,7 +133,7 @@ impl SelectableList {
                     }
                     ui.label(format!("Body: {}", self.items[i].body));
                 });
-                
+
                 // Handle selection on click
                 if response.header_response.clicked() {
                     self.selected_item = Some(i);
