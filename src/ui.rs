@@ -91,22 +91,11 @@ impl MyApp {
             sorted_notes = title_sorted_notes;
         }
 
-        // Filter by body if there's a body filter
+        // Filter by body using SQLite FTS search if there's a body filter
         if !self.body_filter.is_empty() {
-            let bodies: Vec<String> = sorted_notes.iter()
-                .map(|note| note.body.clone())
-                .collect();
-
-            let sorted_bodies = bm25_trigram(&bodies, &self.body_filter);
-
-            // Reorder notes based on sorted bodies
-            let mut body_sorted_notes = Vec::new();
-            for body in sorted_bodies {
-                if let Some(note) = sorted_notes.iter().find(|note| note.body == body) {
-                    body_sorted_notes.push(note.clone());
-                }
+            if let Ok(matches) = Note::search(DATABASE, &self.body_filter) {
+                sorted_notes = matches;
             }
-            sorted_notes = body_sorted_notes;
         }
 
         // Update the list with filtered notes
