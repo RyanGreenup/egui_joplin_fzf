@@ -2,9 +2,11 @@
 #![allow(rustdoc::missing_crate_level_docs)] // it's an example
 
 use eframe::egui;
-use rand::distributions::Alphanumeric;
+mod bm25;
+mod note;
+use bm25::bm25;
+use note::Note;
 use rand::{thread_rng, Rng};
-use std::fmt::Display;
 
 fn main() -> eframe::Result {
     env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
@@ -22,33 +24,6 @@ fn main() -> eframe::Result {
             Ok(Box::<MyApp>::default())
         }),
     )
-}
-
-#[derive(Debug, Clone)]
-struct Note {
-    title: String,
-    body: String,
-    id: String,
-}
-
-impl Note {
-    fn random(title: &str, body: &str) -> Self {
-        let title = title.into();
-        let body = body.into();
-        let rng = thread_rng();
-        let id: String = rng
-            .sample_iter(&Alphanumeric)
-            .take(16)
-            .map(char::from)
-            .collect();
-        Self { title, body, id }
-    }
-}
-
-impl Display for Note {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.title)
-    }
 }
 
 struct MyApp {
@@ -79,6 +54,12 @@ impl Default for MyApp {
     }
 }
 
+#[derive(Debug, Clone, Copy)]
+enum Direction {
+    Up,
+    Down,
+}
+
 struct SelectableList {
     items: Vec<Note>,
     selected_item: Option<usize>,
@@ -93,12 +74,6 @@ impl SelectableList {
             selected_item: None,
             item_open: vec![false; len],
         }
-    }
-
-    #[derive(Debug, Clone, Copy)]
-    enum Direction {
-        Up,
-        Down,
     }
 
     fn move_selection(&mut self, direction: Direction) {

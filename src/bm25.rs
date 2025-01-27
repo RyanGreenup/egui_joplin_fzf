@@ -1,5 +1,6 @@
 use ordered_float::OrderedFloat;
 use std::collections::{HashMap, HashSet};
+use crate::note::Note;
 
 fn default_tokenize(s: &str) -> Vec<String> {
     s.split_whitespace().map(String::from).collect()
@@ -16,10 +17,10 @@ pub fn sort_notes_trigram(notes: &[Note], query: &str) -> Vec<Note> {
         .iter()
         .map(|note| format!("{} {}", note.title, note.body))
         .collect();
-    
+
     // Get sorted indices using BM25 trigram
     let sorted_docs = bm25_trigram(&documents, query);
-    
+
     // Map sorted documents back to original notes
     sorted_docs
         .into_iter()

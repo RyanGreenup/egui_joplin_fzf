@@ -15,6 +15,7 @@ env_logger = {version= "0.11.6", default-features = false, features = [
 ] }
 chrono = "0.4"
 rand = "0.8.5"
+ordered-float = "4.6.0"
 
 [[bin]]
 name = "egui_list"
