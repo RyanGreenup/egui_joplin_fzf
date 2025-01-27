@@ -15,16 +15,18 @@ fn main() -> eframe::Result {
 
     match cli.command {
         Some(cli::Commands::List) => {
-            println!("Listing notes...");
-            // TODO: Implement list functionality
+            println!("Listing notes from database: {}", cli.database);
+            // TODO: Implement list functionality using cli.database
         }
         Some(cli::Commands::Add { title, content }) => {
-            println!("Adding note: {} - {}", title, content);
-            // TODO: Implement add functionality
+            println!("Adding note to database: {}", cli.database);
+            println!("Title: {}\nContent: {}", title, content);
+            // TODO: Implement add functionality using cli.database
         }
         Some(cli::Commands::Search { query }) => {
-            println!("Searching for: {}", query);
-            // TODO: Implement search functionality
+            println!("Searching in database: {}", cli.database);
+            println!("Query: {}", query);
+            // TODO: Implement search functionality using cli.database
         }
         None => {
             // No command provided, run the GUI

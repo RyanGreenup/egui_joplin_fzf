@@ -4,6 +4,10 @@ use clap::{Parser, Subcommand};
 #[command(name = "noteapp")]
 #[command(about = "A simple note-taking application", long_about = None)]
 pub struct Cli {
+    /// Path to the notes database
+    #[arg(short, long)]
+    pub database: String,
+
     #[command(subcommand)]
     pub command: Option<Commands>,
 }
