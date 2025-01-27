@@ -1,11 +1,8 @@
-use eframe::egui;
 use crate::bm25::bm25_trigram;
-use egui_demo_lib::easy_mark::easy_mark;
-use crate::note::Note;
-use rand::thread_rng;
-use unindent::unindent;
 use crate::list::SelectableList;
-
+use crate::note::Note;
+use eframe::egui;
+use rand::thread_rng;
 
 const FILTER_ID: &str = "title_filter_id";
 
@@ -63,9 +60,6 @@ impl Default for MyApp {
         }
     }
 }
-
-
-
 
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {

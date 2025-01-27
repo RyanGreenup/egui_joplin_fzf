@@ -1,6 +1,6 @@
+use crate::note::Note;
 use ordered_float::OrderedFloat;
 use std::collections::{HashMap, HashSet};
-use crate::note::Note;
 
 fn default_tokenize(s: &str) -> Vec<String> {
     s.split_whitespace().map(String::from).collect()
@@ -25,9 +25,10 @@ pub fn sort_notes_trigram(notes: &[Note], query: &str) -> Vec<Note> {
     sorted_docs
         .into_iter()
         .filter_map(|doc| {
-            notes.iter().find(|note| {
-                format!("{} {}", note.title, note.body) == doc
-            }).cloned()
+            notes
+                .iter()
+                .find(|note| format!("{} {}", note.title, note.body) == doc)
+                .cloned()
         })
         .collect()
 }
@@ -84,7 +85,7 @@ pub fn bm25(
 
         let mut score = 0.0;
 
-        for (query_term, _) in &term_frequencies_query {
+        for query_term in term_frequencies_query.keys() {
             if let Some(&tf) = term_frequencies_doc.get(query_term) {
                 let idf = idf_values.get(query_term).unwrap_or(&1.0);
                 let numerator = idf * (tf as f64 * (k1 + 1.0));
@@ -121,6 +122,18 @@ fn ngram_tokenize(s: &str) -> Vec<String> {
         .windows(N)
         .map(|window| window.iter().collect::<String>())
         .collect()
+}
+
+fn main() {
+    let documents = vec![
+        "the quick brown fox jumps over the lazy dog".to_string(),
+        "never jump over the lazy dog quickly".to_string(),
+        "a quick movement of the enemy will jeopardize six gunboats".to_string(),
+        "quick and nimble cats jump over sleeping dogs".to_string(),
+    ];
+    let target_string = "never";
+    let sorted_documents = bm25(&documents, target_string, default_tokenize);
+    println!("{:?}", sorted_documents);
 }
 
 #[cfg(test)]
@@ -214,16 +227,4 @@ mod tests {
         let expected = vec!["hel", "ell", "llo"];
         assert_eq!(result, expected);
     }
-}
-
-fn main() {
-    let documents = vec![
-        "the quick brown fox jumps over the lazy dog".to_string(),
-        "never jump over the lazy dog quickly".to_string(),
-        "a quick movement of the enemy will jeopardize six gunboats".to_string(),
-        "quick and nimble cats jump over sleeping dogs".to_string(),
-    ];
-    let target_string = "never";
-    let sorted_documents = bm25(&documents, target_string, default_tokenize);
-    println!("{:?}", sorted_documents);
 }

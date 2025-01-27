@@ -1,8 +1,6 @@
-use crate::bm25::bm25_trigram;
 use crate::note::Note;
 use eframe::egui;
 use egui_demo_lib::easy_mark::easy_mark;
-use rand::thread_rng;
 use unindent::unindent;
 
 #[derive(Debug, Clone, Copy)]

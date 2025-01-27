@@ -7,9 +7,6 @@ mod ui;
 use ui::run;
 mod list;
 
-
-
 fn main() -> eframe::Result {
     run()
 }
-
