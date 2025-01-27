@@ -30,7 +30,7 @@ fn main() -> eframe::Result {
         }
         None => {
             // No command provided, run the GUI
-            ui::run()?
+            ui::run(cli.database)?
         }
     }
 

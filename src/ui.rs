@@ -8,7 +8,7 @@ const FILTER_ID: &str = "title_filter_id";
 const BODY_FILTER_ID: &str = "body_filter_id";
 const LIST_ID: &str = "notes_list_id";
 
-pub fn run() -> eframe::Result {
+pub fn run(database: String) -> eframe::Result {
     env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default().with_inner_size([640.0, 480.0]),
@@ -18,10 +18,8 @@ pub fn run() -> eframe::Result {
         "My egui App",
         options,
         Box::new(|cc| {
-            // This gives us image support:
             egui_extras::install_image_loaders(&cc.egui_ctx);
-
-            Ok(Box::<MyApp>::default())
+            Ok(Box::<MyApp>::new(database))
         }),
     )
 }
@@ -34,7 +32,6 @@ struct MyApp {
     list: SelectableList,
 }
 
-const DATABASE: &str = "/home/ryan/.config/joplin-desktop/database.sqlite";
 
 impl Default for MyApp {
     fn default() -> Self {
@@ -56,10 +53,10 @@ impl MyApp {
         // Get base set of notes
         let mut sorted_notes = if self.body_filter.is_empty() {
             // If body filter is empty, load all notes from database
-            Note::load_all(DATABASE).unwrap_or_else(|_| Vec::new())
+            Note::load_all(&self.database).unwrap_or_else(|_| Vec::new())
         } else {
             // If we have a body filter, use FTS search
-            Note::search(DATABASE, &self.body_filter).unwrap_or_else(|_| Vec::new())
+            Note::search(&self.database, &self.body_filter).unwrap_or_else(|_| Vec::new())
         };
 
         // Then apply title filter if present
