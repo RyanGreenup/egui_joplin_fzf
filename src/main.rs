@@ -4,7 +4,7 @@
 use eframe::egui;
 mod bm25;
 mod note;
-use bm25::bm25;
+use bm25::{bm25, bm25_trigram};
 use note::Note;
 use rand::{thread_rng, Rng};
 
@@ -144,6 +144,28 @@ impl eframe::App for MyApp {
                 let edit = ui
                     .text_edit_singleline(&mut self.name)
                     .labelled_by(title_filter.id);
+
+                if edit.changed() {
+                    // Get all titles as strings
+                    let titles: Vec<String> = self.list.items.iter()
+                        .map(|note| note.title.clone())
+                        .collect();
+
+                    // Get sorted titles using bm25_trigram
+                    let sorted_titles = bm25_trigram(&titles, &self.name);
+
+                    // Reorder notes based on sorted titles
+                    let mut sorted_notes = Vec::new();
+                    for title in sorted_titles {
+                        if let Some(note) = self.list.items.iter()
+                            .find(|note| note.title == title) {
+                            sorted_notes.push(note.clone());
+                        }
+                    }
+                    
+                    // Update the list with sorted notes
+                    self.list = SelectableList::new(sorted_notes);
+                }
 
                 if self.initialization {
                     edit.request_focus();
