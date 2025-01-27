@@ -45,23 +45,6 @@ impl Default for MyApp {
             age: 42,
             list: SelectableList::new(
                 Note::load_all(DATABASE).expect("unable to load database")
-                // [
-                //     Note::random(
-                //         "Pythagorean Theorem",
-                //         "# Heading \n content \n In a right triangle, a² + b² = c²",
-                //     ),
-                //     Note::random("Golden Ratio", "The golden ratio φ ≈ 1.618033988749895"),
-                //     Note::random(
-                //         "Euler's Number",
-                //         "e ≈ 2.718281828459045, base of natural logarithms",
-                //     ),
-                //     Note::random(
-                //         "Pi",
-                //         "π ≈ 3.14159265359, ratio of circle's circumference to diameter",
-                //     ),
-                //     Note::random("Fibonacci Sequence", "0, 1, 1, 2, 3, 5, 8, 13, 21..."),
-                // ]
-                // .to_vec(),
             ),
             initialization: true,
         }
