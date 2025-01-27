@@ -8,6 +8,8 @@ use bm25::{bm25, bm25_trigram};
 use note::Note;
 use rand::{thread_rng, Rng};
 
+const FILTER_ID: &str = "title_filter_id";
+
 fn main() -> eframe::Result {
     env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
     let options = eframe::NativeOptions {
@@ -137,12 +139,17 @@ impl SelectableList {
 
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        if ctx.input(|i| i.key_pressed(egui::Key::S)) {
+            ctx.memory_mut(|mem| mem.request_focus(egui::Id::new(FILTER_ID)));
+        }
+
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Link Creator");
             ui.horizontal(|ui| {
                 let title_filter = ui.label("Title Filter: ");
                 let edit = ui
                     .text_edit_singleline(&mut self.name)
+                    .id(FILTER_ID)
                     .labelled_by(title_filter.id);
 
                 if edit.changed() {
