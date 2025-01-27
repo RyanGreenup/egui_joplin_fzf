@@ -112,11 +112,11 @@ impl SelectableList {
         egui::ScrollArea::vertical().show(ui, |ui| {
             for (i, item) in self.items.iter().enumerate() {
                 let response = ui.selectable_value(&mut self.selected_item, Some(i), &item.title);
-                
+
                 if response.clicked() || response.secondary_clicked() || response.has_focus() {
                     ui.scroll_to_cursor(Some(egui::Align::Center));
                 }
-                
+
                 if Some(i) == self.selected_item {
                     ui.collapsing("Details", |ui| {
                         ui.label(&item.body);
