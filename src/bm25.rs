@@ -11,7 +11,8 @@ pub fn bm25_trigram(documents: &[String], target_string: &str) -> Vec<String> {
 }
 
 /// Sort notes by relevance to query using BM25 with trigram tokenization
-pub fn sort_notes_trigram(notes: &[Note], query: &str) -> Vec<Note> {
+#[allow(dead_code)]
+fn sort_notes_trigram(notes: &[Note], query: &str) -> Vec<Note> {
     // Extract document strings from notes
     let documents: Vec<String> = notes
         .iter()
@@ -124,6 +125,7 @@ fn ngram_tokenize(s: &str) -> Vec<String> {
         .collect()
 }
 
+#[allow(dead_code)]
 fn main() {
     let documents = vec![
         "the quick brown fox jumps over the lazy dog".to_string(),

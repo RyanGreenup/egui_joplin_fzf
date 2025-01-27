@@ -1,5 +1,3 @@
-use rand::distributions::Alphanumeric;
-use rand::{thread_rng, Rng};
 use rusqlite::{Connection, Result as SqlResult};
 use std::fmt::Display;
 
@@ -11,18 +9,6 @@ pub struct Note {
 }
 
 impl Note {
-    pub fn random(title: &str, body: &str) -> Self {
-        let title = title.into();
-        let body = body.into();
-        let rng = thread_rng();
-        let id: String = rng
-            .sample_iter(&Alphanumeric)
-            .take(16)
-            .map(char::from)
-            .collect();
-        Self { title, body, id }
-    }
-
     pub fn load_all(db_path: &str) -> SqlResult<Vec<Note>> {
         let conn = Connection::open(db_path)?;
 
@@ -77,3 +63,22 @@ impl Display for Note {
         write!(f, "{}", self.title)
     }
 }
+
+/*
+impl Note {
+    // This is useful for development
+    use rand::distributions::Alphanumeric;
+    use rand::{thread_rng, Rng};
+    pub fn random(title: &str, body: &str) -> Self {
+        let title = title.into();
+        let body = body.into();
+        let rng = thread_rng();
+        let id: String = rng
+            .sample_iter(&Alphanumeric)
+            .take(16)
+            .map(char::from)
+            .collect();
+        Self { title, body, id }
+    }
+}
+    */
