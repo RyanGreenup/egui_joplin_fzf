@@ -148,8 +148,7 @@ impl eframe::App for MyApp {
             ui.horizontal(|ui| {
                 let title_filter = ui.label("Title Filter: ");
                 let edit = ui.add(egui::TextEdit::singleline(&mut self.name)
-                    .id(egui::Id::new(FILTER_ID))
-                    .labelled_by(title_filter.id));
+                    .id(egui::Id::new(FILTER_ID)));
 
                 if edit.changed() {
                     // Get all titles as strings
