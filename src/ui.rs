@@ -19,7 +19,7 @@ pub fn run(database: String) -> eframe::Result {
         options,
         Box::new(|cc| {
             egui_extras::install_image_loaders(&cc.egui_ctx);
-            Box::new(MyApp::new(database))
+            Ok(Box::new(MyApp::new(database)))
         }),
     )
 }
