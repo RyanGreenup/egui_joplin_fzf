@@ -56,6 +56,15 @@ impl Note {
 
         Ok(notes)
     }
+
+    pub fn get_body_by_id(db_path: &str, note_id: &str) -> SqlResult<String> {
+        let conn = Connection::open(db_path)?;
+        
+        let mut stmt = conn.prepare("SELECT body FROM notes WHERE id = ?")?;
+        let body: String = stmt.query_row([note_id], |row| row.get(0))?;
+        
+        Ok(body)
+    }
 }
 
 impl Display for Note {
