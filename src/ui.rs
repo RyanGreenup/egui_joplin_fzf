@@ -112,6 +112,7 @@ impl MyApp {
 
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        // Modify this to use Ctrl+S AI!
         if ctx.input(|i| i.key_pressed(egui::Key::S)) {
             ctx.memory_mut(|mem| mem.request_focus(egui::Id::new(FILTER_ID)));
         }
