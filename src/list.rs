@@ -27,7 +27,6 @@ pub struct SelectableList {
 
 impl SelectableList {
     pub fn new(items: Vec<Note>) -> Self {
-        let len = items.len();
         Self {
             items,
             selected_item: None,
