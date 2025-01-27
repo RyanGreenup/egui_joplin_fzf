@@ -125,6 +125,9 @@ impl eframe::App for MyApp {
         if ctx.input(|i| i.key_pressed(egui::Key::C) && i.modifiers.ctrl) {
             self.list.copy_selected_to_clipboard(ctx);
         }
+        if ctx.input(|i| i.key_pressed(egui::Key::Enter)) {
+            self.list.print_selected();
+        }
 
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Link Creator");

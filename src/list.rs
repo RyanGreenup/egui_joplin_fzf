@@ -58,6 +58,13 @@ impl SelectableList {
         }
     }
 
+    pub fn print_selected(&self) {
+        if let Some(selected) = self.selected_item {
+            let note = &self.items[selected];
+            println!("# {}\n\n{}", note.title, note.body);
+        }
+    }
+
     pub fn show(&mut self, ctx: &egui::Context, ui: &mut egui::Ui, id: &str) {
         // Auto-select first item if nothing is selected
         if self.selected_item.is_none() && !self.items.is_empty() {
