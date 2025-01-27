@@ -83,21 +83,23 @@ impl SelectableList {
 
         egui::SidePanel::right("note_preview")
             .resizable(true)
-            .min_width(200.0)
+            .min_width(400.0)
             .show_inside(ui, |ui| {
                 if let Some(selected) = self.selected_item {
                     ui.heading(&self.items[selected].title);
                     ui.separator();
                     // ui.label(&self.items[selected].body);
-                    ui.markdown(&self.items[selected].body);
+                    // TODO needs to be scrollable
+
+                    egui::ScrollArea::vertical().show(ui, |ui| {
+                        ui.markdown(&self.items[selected].body);
+                    });
                 } else {
                     ui.label("Select a note to preview");
                 }
             });
 
-        egui::ScrollArea::vertical()
-            .id_source(id)
-            .show(ui, |ui| {
+        egui::ScrollArea::vertical().id_source(id).show(ui, |ui| {
             for (i, item) in self.items.iter().enumerate() {
                 let response = ui.selectable_value(&mut self.selected_item, Some(i), &item.title);
 
@@ -113,7 +115,7 @@ impl SelectableList {
                 // Show details immediately for selected item
                 if Some(i) == self.selected_item {
                     if self.show_preview_under {
-                    ui.label(&item.body);
+                        ui.label(&item.body);
                     }
                 }
             }

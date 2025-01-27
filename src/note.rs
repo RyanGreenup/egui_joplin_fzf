@@ -25,7 +25,7 @@ impl Note {
 
     pub fn load_all(db_path: &str) -> SqlResult<Vec<Note>> {
         let conn = Connection::open(db_path)?;
-        
+
         let mut stmt = conn.prepare("SELECT title, body, id FROM notes")?;
         let note_iter = stmt.query_map([], |row| {
             Ok(Note {
@@ -39,21 +39,20 @@ impl Note {
         for note in note_iter {
             notes.push(note?);
         }
-        
+
         Ok(notes)
     }
-}
 
     pub fn search(db_path: &str, query: &str) -> SqlResult<Vec<Note>> {
         let conn = Connection::open(db_path)?;
-        
+
         // Query using FTS5 table, ordering by BM25 score
         let mut stmt = conn.prepare(
-            "SELECT notes.title, notes.body, notes.id 
+            "SELECT notes.title, notes.body, notes.id
              FROM notes
-             JOIN notes_fts ON notes.id = notes_fts.id
-             WHERE notes_fts MATCH ?1
-             ORDER BY bm25(notes_fts)"
+             JOIN notes_fts5_porter ON notes.id = notes_fts5_porter.id
+             WHERE notes_fts5_porter MATCH ?1
+             ORDER BY bm25(notes_fts5_porter)",
         )?;
 
         let note_iter = stmt.query_map([query], |row| {
@@ -68,9 +67,10 @@ impl Note {
         for note in note_iter {
             notes.push(note?);
         }
-        
+
         Ok(notes)
     }
+}
 
 impl Display for Note {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
