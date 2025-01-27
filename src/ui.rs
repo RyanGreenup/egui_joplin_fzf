@@ -118,6 +118,7 @@ impl eframe::App for MyApp {
         if ctx.input(|i| i.key_pressed(egui::Key::B) && i.modifiers.ctrl) {
             ctx.memory_mut(|mem| mem.request_focus(egui::Id::new(BODY_FILTER_ID)));
         }
+        // Map Ctrl+L to focus the list AI!
 
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Link Creator");
